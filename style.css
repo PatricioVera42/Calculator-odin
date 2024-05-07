@@ -30,6 +30,7 @@ body {
     align-items: center;
     flex-direction: column;
     background-color: var(--black);
+    overflow: hidden;
 }
 
 .display {
@@ -43,12 +44,7 @@ body {
     justify-content: flex-end;
     align-items: center;
     font-family: monospace;
-}
-
-.display h1 {
-    margin: 2%;
     font-size: 70px;
-    overflow: hidden;
 }
 
 .buttons  {
@@ -78,7 +74,7 @@ body {
 }
 
 .equal {
-    background-color: var(--yellow);
+    background-color: var(--yellow) !important;
 }
 
 .number, .other {
@@ -94,5 +90,5 @@ body {
 }
 
 .equal:active {
-    background-color: #FED086;
+    background-color: #FED086 !important;
 }
