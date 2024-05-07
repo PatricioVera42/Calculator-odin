@@ -1,52 +1,125 @@
-let firstNumber;
-let secondNumber;
-let operator;
-let displayValue = document.querySelector("h1.result").innerHTML;
-const addSign = "+";
-const substractSign = "-";
-const multiplySign = "*";
-const divideSign = "/";
+let firstNumber = "";
+let secondNumber = "";
+let operator = "";
+let result = 0;
+let displayValue = "";      
 const numberButtons = document.querySelectorAll("button.number");
 const operationButtons = document.querySelectorAll("button.operation");
-const otherButtons = document.querySelectorAll("button.other");
 const clearButton = document.querySelector("button.clear");
-
-const add = (first, second) => first + second;
-const substract = (first, second) => first - second;
-const multiply = (first, second) => first * second;
-const divide = (first, second) => first / second;
+const equalButton  = document.querySelector("button.equal");
+const percentageButton = document.querySelector("button.percentage");
+const signButton = document.querySelector("button.sign");
+const pointButton = document.querySelector("button.point");
 
 function operate(first, second, sign){
-    if (sign == addSign){
-        return add(first,second);
-    } else if (sign == substractSign){
-        return substract(first,second);
-    } else if (sign == multiplySign){
-        return multiply(first,second);
-    } else if (sign == divideSign){
-        return divide(first,second);
+    if (sign == "+"){
+        return first + second;
+    } else if (sign == "-"){
+        return first - second;
+    } else if (sign == "*"){
+        return first * second;
+    } else if (sign == "/"){
+        if (second == "0"){
+            return 'Error';
+        } else return (first / second).toFixed(5);
     }
 }
 
-clearButton.addEventListener("click", clear());
-
-function clear(){ 
+function clearDisplay(){
     displayValue = "";
+    firstNumber =  "";
+    secondNumber =  "";
+    result = "";
+    operator =  "";
+    updateDisplay();
 }
 
-function display(number){
-    if (displayValue == undefined){
-        displayValue = number;
-        document.querySelector("h1.result").innerHTML = displayValue;
-    } else 
-    displayValue = number + displayValue.toString();
-    document.querySelector("h1.result").innerHTML = displayValue;
-}
+function updateDisplay(){
+    const display = document.querySelector("div.display");
+    display.innerHTML = displayValue;
+}  
+
+updateDisplay();
+
+clearButton.addEventListener("click", () => clearDisplay());
+
+equalButton.addEventListener("click", () => {
+    if (operator != ""){
+        secondNumber = parseFloat(displayValue);
+        result = operate(firstNumber,secondNumber,operator);
+        displayValue = result;
+        updateDisplay();
+        result = "";
+        secondNumber = "";
+        operator = "";
+        firstNumber = displayValue;
+    } else{
+        displayValue = 'Error';
+        updateDisplay()
+    }
+})
 
 numberButtons.forEach((button) =>{
-    const value = button.value;
-    button.addEventListener("click", display(value));
+    button.addEventListener("click", function(e) {
+        if (displayValue == 'Error'){
+            displayValue = e.target.value;
+            updateDisplay();
+        } else if (result != ""){
+            firstNumber = result;
+            secondNumber = e.target.value;
+            operator = "";
+            result = "";
+            displayValue = secondNumber;
+            updateDisplay();
+        } else {
+            displayValue += e.target.value;
+            updateDisplay();
+        }
+    } )
 })
+
+operationButtons.forEach((button) => {
+    button.addEventListener("click", function(e) {
+        if (displayValue != ""){
+            if (operator == ""){
+                firstNumber = parseFloat(displayValue);
+                operator = e.target.value;
+                displayValue = "";
+                updateDisplay();
+            } else {
+                secondNumber = parseFloat(displayValue);
+                result = operate(firstNumber,secondNumber,operator);
+                operator = e.target.value;
+                displayValue = result;
+                updateDisplay();
+            }
+        }
+    })
+})
+
+signButton.addEventListener("click", () => {
+    displayValue = -displayValue;
+    updateDisplay();
+})
+
+percentageButton.addEventListener("click", () => {
+    if (displayValue != 0 ) {
+        displayValue = displayValue / 100;
+        updateDisplay();
+    }
+})
+
+pointButton.addEventListener("click", () => {
+    displayValue += ".";
+    updateDisplay();
+})
+
+
+
+
+
+
+
 
 
 
