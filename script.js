@@ -1,6 +1,7 @@
 let firstNumber = "";
 let secondNumber = "";
-let operator = "";
+let firstOperator = "";
+let secondOperator = "";
 let result = 0;
 let displayValue = "";      
 const numberButtons = document.querySelectorAll("button.number");
@@ -30,7 +31,8 @@ function clearDisplay(){
     firstNumber =  "";
     secondNumber =  "";
     result = "";
-    operator =  "";
+    firstOperator = "";
+    secondOperator = "";
     updateDisplay();
 }
 
@@ -44,15 +46,24 @@ updateDisplay();
 clearButton.addEventListener("click", () => clearDisplay());
 
 equalButton.addEventListener("click", () => {
-    if (operator != ""){
+    if (firstOperator != ""){
         secondNumber = parseFloat(displayValue);
-        result = operate(firstNumber,secondNumber,operator);
+        result = operate(firstNumber,secondNumber,firstOperator);
         displayValue = result;
         updateDisplay();
-        result = "";
         secondNumber = "";
-        operator = "";
+        firstOperator = "";
         firstNumber = displayValue;
+        displayValue = "";
+    } else if (secondOperator != ""){
+        secondNumber = parseFloat(displayValue);
+        result = operate(firstNumber,secondNumber,secondOperator);
+        displayValue = result;
+        updateDisplay();
+        secondNumber = "";
+        secondOperator = "";
+        firstNumber = displayValue;
+        displayValue = "";
     } else{
         displayValue = 'Error';
         updateDisplay()
@@ -67,8 +78,7 @@ numberButtons.forEach((button) =>{
         } else if (result != ""){
             firstNumber = result;
             secondNumber = e.target.value;
-            operator = "";
-            result = "";
+            firstOperator = "";
             displayValue = secondNumber;
             updateDisplay();
         } else {
@@ -81,15 +91,15 @@ numberButtons.forEach((button) =>{
 operationButtons.forEach((button) => {
     button.addEventListener("click", function(e) {
         if (displayValue != ""){
-            if (operator == ""){
+            if (firstOperator == ""){
                 firstNumber = parseFloat(displayValue);
-                operator = e.target.value;
+                firstOperator = e.target.value;
                 displayValue = "";
                 updateDisplay();
             } else {
                 secondNumber = parseFloat(displayValue);
-                result = operate(firstNumber,secondNumber,operator);
-                operator = e.target.value;
+                secondOperator = e.target.value;
+                result = operate(firstNumber,secondNumber,firstOperator);
                 displayValue = result;
                 updateDisplay();
             }
